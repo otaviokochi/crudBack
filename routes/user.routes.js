@@ -5,9 +5,9 @@ module.exports = app => {
 
     app.get('/users', users.findUsers);
 
-    app.get('/users/:id', users.findOne);
+    app.get('/users/:id', users.findUser);
 
-    app.delete('/users/:id', users.delete);
+    app.delete('/users/:id', users.deleteUser);
 
     app.put('/users/:id', users.update);
 }

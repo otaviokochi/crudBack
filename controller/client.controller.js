@@ -6,7 +6,8 @@ const create = (req, res) => {
         email: req.body.email,
         name: req.body.name,
         cpf: req.body.cpf,
-        address: req.body.address
+        address: req.body.address,
+        agr: req.body.age
     });
 
     Client.create(client, (err, data) => {
@@ -21,38 +22,38 @@ const create = (req, res) => {
     })
 };
 
-const findClient = (req, res) => {
-    if (req.query.name) {
-        Client.getByName(req.query.name, (err, data) => {
-            if (err) {
-                if (err.kind === "not found") {
-                    res.status(404).send({
-                        message: `Not found client with name ${req.query.name}`
-                    });
-                } else {
-                    res.status(500).send({
-                        message: `Error retrieving clients with name ${req.query.name}`
-                    });
-                }
-            } else {
-                res.send(data);
-            }
-        });
-    } else {
-        Client.getAll((err, data) => {
-            if (err) {
-                res.status(500).send({
-                    message: err.message || "Some error occurred while retrieving clients"
-                });
-            }
-            else {
-                res.send(data);
-            }
-        });
-    }
+const findClients = (req, res) => {
+    // if (req.query.name) {
+    //     Client.getByName(req.query.name, (err, data) => {
+    //         if (err) {
+    //             if (err.kind === "not found") {
+    //                 res.status(404).send({
+    //                     message: `Not found client with name ${req.query.name}`
+    //                 });
+    //             } else {
+    //                 res.status(500).send({
+    //                     message: `Error retrieving clients with name ${req.query.name}`
+    //                 });
+    //             }
+    //         } else {
+    //             res.send(data);
+    //         }
+    //     });
+    // } else {
+    Client.getAll((err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving clients"
+            });
+        }
+        else {
+            res.send(data);
+        }
+    });
+    // }
 };
 
-const findOne = (req, res) => {
+const findClient = (req, res) => {
     Client.findById(req.params.id, (err, data) => {
         if (err) {
             if (err.kind === "not found") {
@@ -109,8 +110,8 @@ const update = (req, res) => {
 
 module.exports = {
   create,
+  findClients,
   findClient,
-  findOne,
   deleteClient,
   update
 }
