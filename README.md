@@ -6,7 +6,7 @@
   - Criar um SPA para consumir as API's
   
 ## Instruções para rodar
-  - Utilizar o arquivo "crudBase.sql" para criar o banco de dados com o comando "mysql -u 'usuarioBancoDeDados' -p 'NomeDoBancoDeDado' < 'crudBase.sql'"
+  - Utilizar o arquivo "crudBase.sql" para criar as tabelas do banco de dados com o comando "mysql -u 'usuarioBancoDeDados' -p 'NomeDoBancoDeDado' < 'crudBase.sql'"
   - Alterar o arquivo 'db.config.js' campos: host, user, password, database; Para os usados na criação das tabelas.
   - Rodar o comando npm install
   >Porta utilizada para backend: 5000
