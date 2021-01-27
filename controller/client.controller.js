@@ -1,13 +1,12 @@
 const Client = require('../model/client.model');
 
 const create = (req, res) => {
-
     const client = new Client({
         email: req.body.email,
         name: req.body.name,
         cpf: req.body.cpf,
         address: req.body.address,
-        agr: req.body.age
+        age: req.body.age
     });
 
     Client.create(client, (err, data) => {
@@ -23,34 +22,34 @@ const create = (req, res) => {
 };
 
 const findClients = (req, res) => {
-    // if (req.query.name) {
-    //     Client.getByName(req.query.name, (err, data) => {
-    //         if (err) {
-    //             if (err.kind === "not found") {
-    //                 res.status(404).send({
-    //                     message: `Not found client with name ${req.query.name}`
-    //                 });
-    //             } else {
-    //                 res.status(500).send({
-    //                     message: `Error retrieving clients with name ${req.query.name}`
-    //                 });
-    //             }
-    //         } else {
-    //             res.send(data);
-    //         }
-    //     });
-    // } else {
-    Client.getAll((err, data) => {
-        if (err) {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving clients"
-            });
-        }
-        else {
-            res.send(data);
-        }
-    });
-    // }
+    if (req.query.fullName) {
+        Client.getByName(req.query.fullName, (err, data) => {
+            if (err) {
+                if (err.kind === "not found") {
+                    res.status(404).send({
+                        message: `Not found client with name ${req.query.fullName}`
+                    });
+                } else {
+                    res.status(500).send({
+                        message: `Error retrieving clients with name ${req.query.fullName}`
+                    });
+                }
+            } else {
+                res.send(data);
+            }
+        });
+    } else {
+        Client.getAll((err, data) => {
+            if (err) {
+                res.status(500).send({
+                    message: err.message || "Some error occurred while retrieving clients"
+                });
+            }
+            else {
+                res.send(data);
+            }
+        });
+    }
 };
 
 const findClient = (req, res) => {

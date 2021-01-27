@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "otaviokochi",
-    database: "inovaclick_crud"
+    database: "crud"
 });
 
 connection.connect(error => {

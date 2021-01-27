@@ -6,7 +6,10 @@ const create = (req, res) => {
         email: req.body.email,
         name: req.body.name,
         cpf: req.body.cpf,
-        address: req.body.address
+        address: req.body.address,
+        age: req.body.age,
+        login: req.body.login,
+        password: req.body.password
     });
 
     User.create(user, (err, data) => {
@@ -22,8 +25,8 @@ const create = (req, res) => {
 };
 
 const findUsers = (req, res) => {
-    if (req.query.name) {
-        User.getByName(req.query.name, (err, data) => {
+    if (req.query.fullName) {
+        User.getByName(req.query.fullName, (err, data) => {
             if (err) {
                 if (err.kind === "not found") {
                     res.status(404).send({
@@ -89,8 +92,8 @@ const deleteUser = (req, res) => {
 }
 
 const update = (req, res) => {
-
-    User.updateById(req.params.id, new User(req.body), (err, data) => {
+    const user = {...req.body}
+    User.updateById(req.params.id, user, (err, data) => {
         if (err) {
             if (err.kind === "not found") {
                 res.status(400).send({
