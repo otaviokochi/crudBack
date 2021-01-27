@@ -3,7 +3,6 @@
 
 ## Objetivos
   -  Criar uma API em NodeJS com integração com banco de dados MySQL
-  - Criar um SPA para consumir as API's
   
 ## Instruções para rodar
   - Utilizar o arquivo "crudBase.sql" para criar as tabelas do banco de dados com o comando "mysql -u 'usuarioBancoDeDados' -p 'NomeDoBancoDeDado' < 'crudBase.sql'"
