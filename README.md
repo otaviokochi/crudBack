@@ -3,29 +3,11 @@
 
 ## Objetivos
   -  Criar uma API em NodeJS com integração com banco de dados MySQL
-
-## Critérios
+  - Criar um SPA para consumir as API's
   
-  - A API precisa conter as seguintes funcionalidades: 
-    - Consultar usuários (com e sem filtro)
-      - GET /usuarios (retorna todos usuários)
-      - GET /usuarios/id (retorna todos os dados de um usuário)
-    - Adicionar usuários
-       - POST /usuarios
-    - Atualizar usuários
-      - PUT /usuarios/id
-    - Remover usuários
-      - DELETE /usuarios/id
-  
-## Instruções para entrega 
-  - Faça um fork deste projeto
-  - Crie uma pasta com seu nome 
-  - Depois de concluído faça um pull request
-  
-  ## Bônus
-  
-  > Obs: Os bônus não são obrigatórios, porém contarão uns pontos a mais :D
-  
-    - Criar um Front-End SPA (single page application) para consumir a API criada utilizando VueJS
-    - Rodar o ambiente em Docker utilizando o docker-compose
-    
+## Instruções para rodar
+  - Utilizar o arquivo "crudBase.sql" para criar o banco de dados com o comando "mysql -u 'usuarioBancoDeDados' -p 'NomeDoBancoDeDado' < 'crudBase.sql'"
+  - Alterar o arquivo 'db.config.js' campos: host, user, password, database; Para os usados na criação das tabelas.
+  - Rodar o comando npm install
+  >Porta utilizada para backend: 5000
+  - Rodar o comando npm start
