@@ -1,4 +1,4 @@
-const sql = require('../config/db.config');
+const knex = require('../src/database/db')
 
 const Client = function(client) {
     this.address = client.address;
@@ -9,91 +9,61 @@ const Client = function(client) {
 };
 
 Client.create = (newClient, result) => {
-    sql.query("INSERT INTO clients set ?", newClient, (err, res) => {
-        if(err) {
-            console.log("error: ", err);
-            result(err, null);
-        } else {
-            console.log("created client: ", { id: res.insertId, ...newClient });
-            result(null, { id: res.insertId, ...newClient });
-        }
-    });
+    knex('clients').insert({
+        address: newClient.address,
+        cpf: newClient.cpf,
+        fullName: newClient.fullName,
+        email: newClient.email,
+        age: newClient.age,
+    })
+    .then(response => result(null, response))
+    .catch(err => result(err, null));
 };
 
 Client.getAll = result => {
-    sql.query("SELECT * FROM clients", (err, res) => {
-        if(err) {
-            console.log("error: ", err);
-            result(err, null);
-        } else {
-            console.log("clients: ", res);
-            result(null, res);
-        }
-    });
+    knex('clients')
+        .then(response => result(null, response))
+        .catch(err => result(err, null));
 };
 
 Client.getByName = (clientName, result) => {
-    sql.query("SELECT * FROM clients WHERE fullName LIKE ?\"%\"", clientName, (err, res) => {
-        if(err) {
-            console.log("error: ", err);
-            result(err, null);
-        } else {
-            if(res.length) {
-                console.log("found clients: ", res);
-                result(null, res);
-            } else {
-                result(null, null);
-            }
-        }
-    });
+    knex('clients').where('fullName', 'like', `%${clientName}%`)
+        .then(response => {
+            result(null, response)
+        })
+        .catch(err => result(err, null));
 };
 
 Client.findById = (id, result) => {
-    sql.query("SELECT * FROM clients WHERE id = ?", id, (err, res) => {
-        if(err) {
-            console.log("error: ", err);
-            result(err, null);
-        } else {
-            if(res.length) {
-                console.log("found client: ", res[0]);
-                result(null, res[0]);
-            } else {
-                result(null, null);
-            }
-        }
-    });
+    knex('clients').where('id', id)
+        .then(response => result(null, response))
+        .catch(err => result(err, null));
 };
 
 Client.updateById = (id, client, result) => {
-    sql.query("UPDATE clients SET age = ?, email = ?, fullName = ?, cpf = ?, address = ? WHERE id = ?", [client.age, client.email, client.fullName, client.cpf, client.address, id], (err, res) => {
-        if(err) {
-            console.log("error: ", err);
-            result(err, null);
-        } else {
-            if(res.affectedRows == 0) {
-                result(null, null);
-            } else {
-                console.log("updated client: ", { id: id, ...client });
-                result(null, { id: id, ...client });
-            }
-        }
-    });
+    knex('clients').where('id', id).update({
+        address: client.address,
+        cpf: client.cpf,
+        fullName: client.name,
+        email: client.email,
+        age: client.age
+    })
+        .then(response => {
+            result(null, response)
+        })
+        .catch(err => { 
+            console.log(err);
+            result(err, null)
+        });
 };
 
 Client.remove = (id, result) => {
-    sql.query("DELETE FROM clients WHERE id = ?", id, (err, res) => {
-        if(err) {
-            console.log("error: ", err);
-            result(err, null);
-        } else {
-            if(res.affectedRows == 0) {
-                result(null, null)
-            } else {
-                console.log("deleted client with id: ", id);
-                result(null, res);
-            }
-        }
-    });
+    knex('clients').where('id', id).del()
+        .then(response => {
+            result(null, response)})
+        .catch(err => {
+            result(err, null)
+        });
 };
 
 module.exports = Client;

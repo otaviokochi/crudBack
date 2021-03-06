@@ -19,6 +19,7 @@ const create = (req, res) => {
             });
         }
         else {
+            //data has the id of the created user
             res.send(data);
         }
     })
@@ -28,15 +29,9 @@ const findUsers = (req, res) => {
     if (req.query.fullName) {
         User.getByName(req.query.fullName, (err, data) => {
             if (err) {
-                if (err.kind === "not found") {
-                    res.status(404).send({
-                        message: `Not found user with name ${req.query.name}`
-                    });
-                } else {
-                    res.status(500).send({
-                        message: `Error retrieving users with name ${req.query.name}`
-                    });
-                }
+                res.status(500).send({
+                    message: `Error retrieving users with name ${req.query.name}`
+                });
             } else {
                 res.send(data);
             }
@@ -58,15 +53,9 @@ const findUsers = (req, res) => {
 const findUser = (req, res) => {
     User.findById(req.params.id, (err, data) => {
         if (err) {
-            if (err.kind === "not found") {
-                res.status(404).send({
-                    message: `Not found user with id ${req.params.id}`
-                });
-            } else {
-                res.status(500).send({
-                    message: `Error retrieving user with id ${req.params.id}`
-                });
-            }
+            res.status(500).send({
+                message: `Error retrieving user with id ${req.params.id}`
+            });
         } else {
             res.send(data);
         }
@@ -76,17 +65,15 @@ const findUser = (req, res) => {
 const deleteUser = (req, res) => {
     User.remove(req.params.id, (err, data) => {
         if (err) {
-            if (err.kind === "not found") {
-                res.status(404).send({
-                    message: `Not found user with id ${req.params.id}`
-                });
-            } else {
-                res.status(500).send({
-                    message: `Error deleting user with id: ${req.params.id}`
-                });
-            }
+            res.status(500).send({
+                message: `Error deleting user with id: ${req.params.id}`
+            });
         } else {
-            res.send({ message: 'User was successfully deleted!' });
+            //data has the number of affected rows
+            if(data > 0)
+                res.send({ message: `Usuário de id ${req.params.id} deletado com sucesso!` });
+            else 
+                res.send({ message: `Usuário de id ${req.params.id} não encontrado!` });
         }
     })
 }
@@ -95,17 +82,15 @@ const update = (req, res) => {
     const user = {...req.body}
     User.updateById(req.params.id, user, (err, data) => {
         if (err) {
-            if (err.kind === "not found") {
-                res.status(400).send({
-                    message: `Not found user with id ${req.params.id}`
-                });
-            } else {
-                res.status(500).send({
-                    message: `Error updating user with id: ${req.params.id}`
-                });
-            }
+            res.status(500).send({
+                message: `Error updating user with id: ${req.params.id}`
+            });
         } else {
-            res.send(data);
+            //data has the number of affected rows
+            if(data > 0)
+                res.send({message: `Usuário de id ${req.params.id} alterado com sucesso!`});
+            else 
+                res.send({message: `Usuário de id ${req.params.id} não encontrado!`});
         }
     });
 };

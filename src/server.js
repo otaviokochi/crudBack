@@ -14,8 +14,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-require("./routes/user.routes")(app);
-require("./routes/client.routes")(app);
+require("../routes/user.routes")(app);
+require("../routes/client.routes")(app);
 
 
 
@@ -30,7 +30,7 @@ app.use(cookieParser('secret'));
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./config/passport.config.js')(passport);
+require('../config/passport.config.js')(passport);
 
 app.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user) => {

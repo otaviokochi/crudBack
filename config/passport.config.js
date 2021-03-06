@@ -5,9 +5,10 @@ const md5 = require('md5');
 module.exports = function(passport) {
   passport.use(
     new localStrategy({usernameField: 'username', passwordField: 'password'}, (username, password, done) => {
+
       User.findByLogin(username, (err, user) => {
         if (err)  return done(err); 
-        if (!user)  return done(null, false, {message: 'Credenciais erradas!'});
+        if (user.length == 0)  return done(null, false, {message: 'Credenciais erradas!'});
         if (md5(password) === user[0].password) return done(null, user[0]);
         else return done(null, false, {message: 'Credenciais erradas!'});
       })
