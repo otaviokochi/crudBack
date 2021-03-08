@@ -5,10 +5,10 @@ module.exports = {
   development: {
     client: 'mysql',
     connection: {
-      host: "localhost",
-      user: "root", 
-      password: "otaviokochi",
-      database: "crud"
+      host: "",
+      user: "", 
+      password: "",
+      database: ""
     },
     migrations: {
       tableName: 'knex_migrations',
