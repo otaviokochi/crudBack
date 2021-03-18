@@ -13,3 +13,4 @@
   - Rodar o comando ```npm install```
   >Porta utilizada para backend: 5000
   - Rodar o comando npm start
+  - Utilizar o repositório crudFront para o front-end
