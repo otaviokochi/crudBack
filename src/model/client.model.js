@@ -1,4 +1,4 @@
-const knex = require('../src/database/db')
+const knex = require('../../database/db')
 
 const Client = function (client) {
   this.address = client.address;

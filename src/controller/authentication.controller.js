@@ -1,8 +1,7 @@
-const { authSecret} = require('../.env');
 const jwt = require('jwt-simple')
 const User = require('../model/user.model');
 const md5 = require('md5');
-const knex = require('../src/database/db')
+const knex = require('../../database/db')
 
 const signin = async (req, res) => {
   console.log(req.body)
@@ -24,7 +23,7 @@ const signin = async (req, res) => {
 
   res.json({
     ...payload,
-    token: jwt.encode(payload, authSecret)
+    token: jwt.encode(payload, process.env.AUTH_SECRET)
   })
 }
 
@@ -32,7 +31,7 @@ const validateToken = async (req, res) => {
   const userData = req.body || null;
   try {
     if(userData) {
-      const token = jwt.decode(userData.token, authSecret);
+      const token = jwt.decode(userData.token, process.env.AUTH_SECRET);
       if(new Date(token.exp * 1000) > new Date()) {
         return res.send(true)
       }

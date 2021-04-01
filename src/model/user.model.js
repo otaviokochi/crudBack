@@ -1,4 +1,4 @@
-const knex = require('../src/database/db')
+const knex = require('../../database/db')
 const md5 = require('md5');
 
 const User = function (user) {

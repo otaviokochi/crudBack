@@ -1,12 +1,11 @@
 const passport = require('passport');
-const { authSecret } = require('../.env');
 const passportJwt = require('passport-jwt');
 const { Strategy, ExtractJwt } = passportJwt;
-const User = require('../controller/user.controller')
-const knex = require('../src/database/db')
+// const User = require('../controller/user.controller')
+const knex = require('../../database/db');
 
 const params = {
-  secretOrKey: authSecret,
+  secretOrKey: process.env.AUTH_SECRET,
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 }
 

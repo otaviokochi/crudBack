@@ -4,15 +4,15 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 5000;
-
+require('dotenv').config();
 
 app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-require('../routes/authentication.routes')(app);
+require('./routes/authentication.routes')(app);
 
-require("../routes/user.routes")(app);
-require("../routes/client.routes")(app);
+require("./routes/user.routes")(app);
+require("./routes/client.routes")(app);
 
 
 app.use(cookieParser('secret'));
