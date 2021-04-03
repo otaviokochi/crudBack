@@ -1,5 +1,4 @@
-const knex = require('../../database/db')
-const md5 = require('md5');
+const knex = require('../../database/db');
 
 const User = function (user) {
   this.address = user.address;
@@ -7,7 +6,7 @@ const User = function (user) {
   this.fullName = user.name;
   this.email = user.email;
   this.age = user.age;
-  this.password = md5(user.password);
+  this.password = user.password;
   this.login = user.login;
 };
 

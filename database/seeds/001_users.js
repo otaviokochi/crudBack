@@ -13,7 +13,7 @@ exports.seed = function(knex) {
           address: 'osvaldo cruz',
           cpf: '0000',
           login: 'otaviokochi',
-          password: '6d98056ad5a5d243b7b082e008fe9281'
+          password: '$2b$10$wM57obIBLX9hMSWRcwOPPei0WpMfD/yA3L.e9.ZZSnpM8CP9FRUEO'
         },
       ]);
     });

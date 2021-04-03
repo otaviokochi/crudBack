@@ -1,7 +1,8 @@
 const User = require('../model/user.model');
+const bcrypt = require('bcrypt');
 
-const create = (req, res) => {
-
+const create = async (req, res) => {
+  const password = await bcrypt.hash(req.body.password, 10);
   const user = new User({
     email: req.body.email,
     name: req.body.name,
@@ -9,13 +10,13 @@ const create = (req, res) => {
     address: req.body.address,
     age: req.body.age,
     login: req.body.login,
-    password: req.body.password
+    password: password
   });
 
   User.create(user, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: err.message || "Some error occurred while creating the user"
+        message: err.message || "Erro ao criar o usuário"
       });
     }
     else {
@@ -30,7 +31,7 @@ const findUsers = (req, res) => {
     User.getByName(req.query.fullName, (err, data) => {
       if (err) {
         res.status(500).send({
-          message: `Error retrieving users with name ${req.query.name}`
+          message: `Erro ao recuperar o usuário ${req.query.name}`
         });
       } else {
         res.send(data);
@@ -54,7 +55,7 @@ const findUser = (req, res) => {
   User.findById(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: `Error retrieving user with id ${req.params.id}`
+        message: `Erro ao recuperar o usuário de id ${req.params.id}`
       });
     } else {
       res.send(data);
@@ -66,7 +67,7 @@ const deleteUser = (req, res) => {
   User.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: `Error deleting user with id: ${req.params.id}`
+        message: `Erro ao deletar o usuário de id: ${req.params.id}`
       });
     } else {
       //data has the number of affected rows
@@ -83,7 +84,7 @@ const update = (req, res) => {
   User.updateById(req.params.id, user, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: `Error updating user with id: ${req.params.id}`
+        message: `Erro ao atualizar o usuário de id: ${req.params.id}`
       });
     } else {
       //data has the number of affected rows

@@ -1,7 +1,6 @@
 const passport = require('passport');
 const passportJwt = require('passport-jwt');
 const { Strategy, ExtractJwt } = passportJwt;
-// const User = require('../controller/user.controller')
 const knex = require('../../database/db');
 
 const params = {

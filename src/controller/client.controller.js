@@ -13,7 +13,7 @@ const create = (req, res) => {
   Client.create(client, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: err.message || "Some error occurred while creating the client"
+        message: err.message || "Erro ao criar o cliente"
       });
     }
     else {
@@ -29,7 +29,7 @@ const findClients = (req, res) => {
     Client.getByName(req.query.fullName, (err, data) => {
       if (err) {
         res.status(500).send({
-          message: `Error retrieving clients with name ${req.query.name}`
+          message: `Erro ao procurar cliente ${req.query.name}`
         });
       } else {
         res.send(data);
@@ -39,7 +39,7 @@ const findClients = (req, res) => {
     Client.getAll((err, data) => {
       if (err) {
         res.status(500).send({
-          message: err.message || "Some error occurred while retrieving clients"
+          message: err.message || "Erro ao recuperar os clientes"
         });
       }
       else {
@@ -53,7 +53,7 @@ const findClient = (req, res) => {
   Client.findById(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: `Error retrieving client with id ${req.params.id}`
+        message: `Erro ao procurar o cliente de id ${req.params.id}`
       });
     } else {
       res.send(data);
@@ -65,7 +65,7 @@ const deleteClient = (req, res) => {
   Client.remove(req.params.id, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: `Error deleting client with id: ${req.params.id}`
+        message: `Erro ao deletar o cliente de id: ${req.params.id}`
       });
     } else {
       //data has the number of affected rows
@@ -82,7 +82,7 @@ const update = (req, res) => {
   Client.updateById(req.params.id, client, (err, data) => {
     if (err) {
       res.status(500).send({
-        message: `Error updating client with id: ${req.params.id}`
+        message: `Erro ao atualizar o cliente de id: ${req.params.id}`
       });
     } else {
       //data has the number of affected rows
