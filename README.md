@@ -6,6 +6,14 @@
   
 ## Instruções para rodar
   - Alterar o arquivo 'knexfile.js' campos: host, user, password, database; Para os que deseja realizar as migrations.
+  ```javascript
+    //exemplo
+    host: "localhost",
+    user: "root",
+    password: "password",
+    database: "crud"
+  ```
+  - Criar um arquivo .env com ```AUTH_SECRET``` e um valor string.
   - Rodar o comando ```knex migrate:latest```
   > Caso não possua o knex instalado globalmente utilize ```npx knex migrate:latest```
   - Rodar o comando ```knex seed:run```
