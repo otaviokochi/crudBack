@@ -6,7 +6,6 @@
   
 ## Instruções para rodar
   - Alterar o arquivo 'knexfile.js' campos: host, user, password, database; Para os que deseja realizar as migrations.
-<<<<<<< HEAD
   ```javascript
     //exemplo
     host: "localhost",
