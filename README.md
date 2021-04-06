@@ -14,10 +14,7 @@
     password: "password",
     database: "crud"
   ```
-  - Criar um arquivo .env com ```AUTH_SECRET``` e um valor string.
-=======
   - Criar um arquivo ```.env``` com ```AUTH_SECRET``` receber uma string.
->>>>>>> 95a890c727c68ce47a70c0b11a5e07d75ad98ba4
   - Rodar o comando ```knex migrate:latest```
   > Caso não possua o knex instalado globalmente utilize ```npx knex migrate:latest```
   - Rodar o comando ```knex seed:run```
