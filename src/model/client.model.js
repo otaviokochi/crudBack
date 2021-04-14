@@ -44,7 +44,6 @@ Client.findById = (id, result) => {
 Client.updateById = (id, client, result) => {
   knex('clients').where('id', id).update({
     address: client.address,
-    cpf: client.cpf,
     fullName: client.name,
     email: client.email,
     age: client.age

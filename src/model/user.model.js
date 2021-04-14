@@ -46,6 +46,7 @@ User.findByLogin = (login) => {
 
 User.findById = (id, result) => {
   knex('users').where('id', id)
+    .select('id', 'fullName', 'email', 'age', 'address')
     .first()
     .then(response => result(null, response))
     .catch(err => result(err, null));
@@ -54,7 +55,6 @@ User.findById = (id, result) => {
 User.updateById = (id, user, result) => {
   knex('users').where('id', id).update({
     address: user.address,
-    cpf: user.cpf,
     fullName: user.name,
     email: user.email,
     age: user.age
