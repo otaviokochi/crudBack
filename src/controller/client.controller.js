@@ -12,9 +12,16 @@ const create = (req, res) => {
 
   Client.create(client, (err, data) => {
     if (err) {
-      res.status(500).send({
-        message: err.message || "Erro ao criar o cliente"
-      });
+      if(err.code == 'ER_DUP_ENTRY') {
+        console.log(err);
+        res.status(400).send({ message: `Cliente de email ${client.email} já cadastrado` });
+      } else if(err.code == 'ER_NO_DEFAULT_FOR_FIELD') {
+        console.log(err);
+        res.status(400).send({ message: 'Dados para criação faltando!' });
+      } else {
+        console.log(err);
+        res.statusSend(500);
+      }
     }
     else {
       //data has the id of the created user
@@ -72,7 +79,7 @@ const deleteClient = (req, res) => {
       if (data > 0)
         res.send({ message: `Cliente de id ${req.params.id} deletado com sucesso!` });
       else
-        res.send({ message: `Cliente de id ${req.params.id} não encontrado!` });
+        res.status(400).send({ message: `Cliente de id ${req.params.id} não encontrado!` });
     }
   })
 }
@@ -90,7 +97,7 @@ const update = (req, res) => {
         res.send({ message: `Cliente de id ${req.params.id} alterado com sucesso!` });
       }
       else
-        res.send({ message: `Cliente de id ${req.params.id} não encontrado!` });
+        res.status(400).send({ message: `Cliente de id ${req.params.id} não encontrado!` });
     }
   });
 };

@@ -2,28 +2,42 @@ const User = require('../model/user.model');
 const bcrypt = require('bcrypt');
 
 const create = async (req, res) => {
-  const password = await bcrypt.hash(req.body.password, 10);
-  const user = new User({
-    email: req.body.email,
-    name: req.body.name,
-    cpf: req.body.cpf,
-    address: req.body.address,
-    age: req.body.age,
-    login: req.body.login,
-    password: password
-  });
-
-  User.create(user, (err, data) => {
-    if (err) {
-      res.status(500).send({
-        message: err.message || "Erro ao criar o usuário"
-      });
-    }
-    else {
-      //data has the id of the created user
-      res.send(data);
-    }
-  })
+  const password = await bcrypt.hash(req.body.password, 10).catch(err => false);
+  if (password) {
+    const user = new User({
+      email: req.body.email,
+      name: req.body.name,
+      cpf: req.body.cpf,
+      address: req.body.address,
+      age: req.body.age,
+      login: req.body.login,
+      password: password
+    });
+  
+    User.create(user, (err, data) => {
+      if (err) {
+        if(err.code == 'ER_DUP_ENTRY') {
+          console.log(err);
+          if (err.sqlMessage.includes('users.users_email_unique'))
+            res.status(400).send({ message: `Usuário de email ${req.body.email} já criado` });
+          else 
+            res.status(400).send({ message: `Usuário de login ${req.body.login} já criado` });
+        } else if(err.code == 'ER_NO_DEFAULT_FOR_FIELD') {
+          console.log(err);
+          res.status(400).send({ message: 'Dados para criação faltando!' });
+        } else {
+          console.log(err);
+          res.statusSend(500);
+        }
+      }
+      else {
+        //data has the id of the created user
+        res.send(data);
+      }
+    })
+  } else {
+    res.status(400).send({ message: 'Dados para criação faltando!' });
+  }
 };
 
 const findUsers = (req, res) => {
@@ -74,7 +88,7 @@ const deleteUser = (req, res) => {
       if (data > 0)
         res.send({ message: `Usuário de id ${req.params.id} deletado com sucesso!` });
       else
-        res.send({ message: `Usuário de id ${req.params.id} não encontrado!` });
+        res.status(400).send({ message: `Usuário de id ${req.params.id} não encontrado!` });
     }
   })
 }
@@ -91,7 +105,7 @@ const update = (req, res) => {
       if (data > 0)
         res.send({ message: `Usuário de id ${req.params.id} alterado com sucesso!` });
       else
-        res.send({ message: `Usuário de id ${req.params.id} não encontrado!` });
+        res.status(400).send({ message: `Usuário de id ${req.params.id} não encontrado!` });
     }
   });
 };
