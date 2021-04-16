@@ -8,7 +8,7 @@ const Client = function (client) {
   this.age = client.age
 };
 
-Client.create = (newClient, result) => {
+Client.create = (newClient) => new Promise((resolve, reject) => {
   knex('clients').insert({
     address: newClient.address,
     cpf: newClient.cpf,
@@ -16,55 +16,50 @@ Client.create = (newClient, result) => {
     email: newClient.email,
     age: newClient.age,
   })
-    .then(response => result(null, response))
-    .catch(err => result(err, null));
-};
+    .then(response => resolve(response))
+    .catch(err => reject(err));
 
-Client.getAll = result => {
+})
+
+Client.getAll = () => new Promise((resolve, reject) => {
   knex('clients')
-    .then(response => result(null, response))
-    .catch(err => result(err, null));
-};
+    .then(response => resolve(response))
+    .catch(err => reject(err));
 
-Client.getByName = (clientName, result) => {
+})
+
+Client.getByName = (clientName,) => new Promise((resolve, reject) => {
   knex('clients').where('fullName', 'like', `%${clientName}%`)
-    .then(response => {
-      result(null, response)
-    })
-    .catch(err => result(err, null));
-};
+    .then(response => resolve(response))
+    .catch(err => reject(err));
+})
 
-Client.findById = (id, result) => {
+
+Client.findById = (id,) => new Promise((resolve, reject) => {
   knex('clients').where('id', id)
     .first()
-    .then(response => result(null, response))
-    .catch(err => result(err, null));
-};
+    .then(response => resolve(response))
+    .catch(err => reject(err));
+})
 
-Client.updateById = (id, client, result) => {
+
+Client.updateById = (id, client,) => new Promise((resolve, reject) => {
   knex('clients').where('id', id).update({
     address: client.address,
     fullName: client.name,
     email: client.email,
     age: client.age
   })
-    .then(response => {
-      result(null, response)
-    })
-    .catch(err => {
-      console.log(err);
-      result(err, null)
-    });
-};
+    .then(response => resolve(response))
+    .catch(err => reject(err));
+})
 
-Client.remove = (id, result) => {
+
+Client.remove = (id,) => new Promise((resolve, reject) => {
   knex('clients').where('id', id).del()
-    .then(response => {
-      result(null, response)
-    })
-    .catch(err => {
-      result(err, null)
-    });
-};
+    .then(response => resolve(response))
+    .catch(err => reject(err));
+})
+
 
 module.exports = Client;

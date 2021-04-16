@@ -2,7 +2,7 @@ const User = require('../model/user.model');
 const bcrypt = require('bcrypt');
 
 const create = async (req, res) => {
-  const password = await bcrypt.hash(req.body.password, 10).catch(err => false);
+  const password = await bcrypt.hash(req.body.password, 10).catch(error => false);
   if (password) {
     const user = new User({
       email: req.body.email,
@@ -13,101 +13,99 @@ const create = async (req, res) => {
       login: req.body.login,
       password: password
     });
-  
-    User.create(user, (err, data) => {
-      if (err) {
-        if(err.code == 'ER_DUP_ENTRY') {
-          console.log(err);
-          if (err.sqlMessage.includes('users.users_email_unique'))
+
+    const response = await User.create(user)
+      .catch(error => {
+        console.log(error);
+        if (error.code == 'ER_DUP_ENTRY') {
+          if (error.sqlMessage.includes('users.users_email_unique'))
             res.status(400).send({ message: `Usuário de email ${req.body.email} já criado` });
-          else 
+          else
             res.status(400).send({ message: `Usuário de login ${req.body.login} já criado` });
-        } else if(err.code == 'ER_NO_DEFAULT_FOR_FIELD') {
-          console.log(err);
+        } else if (error.code == 'ER_NO_DEFAULT_FOR_FIELD') {
           res.status(400).send({ message: 'Dados para criação faltando!' });
         } else {
-          console.log(err);
           res.statusSend(500);
         }
-      }
-      else {
-        //data has the id of the created user
-        res.send(data);
-      }
-    })
+        return new Error(error);
+      })
+    if (response instanceof Error) return;
+    //response has the id of the created user
+    res.send(response);
   } else {
     res.status(400).send({ message: 'Dados para criação faltando!' });
   }
 };
 
-const findUsers = (req, res) => {
+const findUsers = async (req, res) => {
   if (req.query.fullName) {
-    User.getByName(req.query.fullName, (err, data) => {
-      if (err) {
+    const response = await User.getByName(req.query.fullName)
+      .catch(error => {
+        console.log(error);
         res.status(500).send({
           message: `Erro ao recuperar o usuário ${req.query.name}`
         });
-      } else {
-        res.send(data);
-      }
-    });
+      })
+    if (response instanceof Error) return;
+    res.send(response);
   } else {
-    User.getAll((err, data) => {
-      if (err) {
+    const response = await User.getAll()
+      .catch(error => {
+        console.log(error);
         res.status(500).send({
-          message: err.message || "Some error occurred while retrieving users"
+          message: error.message || "Some error occurred while retrieving users"
         });
-      }
-      else {
-        res.send(data);
-      }
-    });
+      })
+    if (response instanceof Error) return;
+    res.send(response);
   }
 };
 
-const findUser = (req, res) => {
-  User.findById(req.params.id, (err, data) => {
-    if (err) {
+const findUser = async (req, res) => {
+  const response = await User.findById(req.params.id,)
+    .catch(error => {
+      console.log(error);
       res.status(500).send({
         message: `Erro ao recuperar o usuário de id ${req.params.id}`
       });
-    } else {
-      res.send(data);
-    }
-  })
+    })
+  if (response instanceof Error) return;
+  res.send(response);
 }
 
-const deleteUser = (req, res) => {
-  User.remove(req.params.id, (err, data) => {
-    if (err) {
+const deleteUser = async (req, res) => {
+  const response = await User.remove(req.params.id,)
+    .catch(error => {
+      console.log(error);
       res.status(500).send({
         message: `Erro ao deletar o usuário de id: ${req.params.id}`
       });
-    } else {
-      //data has the number of affected rows
-      if (data > 0)
-        res.send({ message: `Usuário de id ${req.params.id} deletado com sucesso!` });
-      else
-        res.status(400).send({ message: `Usuário de id ${req.params.id} não encontrado!` });
-    }
-  })
+    })
+  if (response instanceof Error) return;
+  //response has the number of affected rows
+  if (response > 0)
+    res.send({ message: `Usuário de id ${req.params.id} deletado com sucesso!` });
+  else
+    res.status(400).send({ message: `Usuário de id ${req.params.id} não encontrado!` });
+
 }
 
-const update = (req, res) => {
+const update = async (req, res) => {
   const user = { ...req.body }
-  User.updateById(req.params.id, user, (err, data) => {
-    if (err) {
+  const response = await User.updateById(req.params.id, user,)
+    .catch(error => {
+      console.log(error);
       res.status(500).send({
         message: `Erro ao atualizar o usuário de id: ${req.params.id}`
       });
-    } else {
-      //data has the number of affected rows
-      if (data > 0)
-        res.send({ message: `Usuário de id ${req.params.id} alterado com sucesso!` });
-      else
-        res.status(400).send({ message: `Usuário de id ${req.params.id} não encontrado!` });
-    }
-  });
+    })
+  if (response instanceof Error) return;
+
+  //response has the number of affected rows
+  if (response > 0)
+    res.send({ message: `Usuário de id ${req.params.id} alterado com sucesso!` });
+  else
+    res.status(400).send({ message: `Usuário de id ${req.params.id} não encontrado!` });
 };
 
 module.exports = {
