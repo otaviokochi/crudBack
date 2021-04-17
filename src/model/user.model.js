@@ -10,7 +10,7 @@ const User = function (user) {
   this.login = user.login;
 };
 
-User.create = (newUser) => new Promise((resolve, reject) => {
+User.create = async (newUser) => 
   knex('users').insert({
     address: newUser.address,
     cpf: newUser.cpf,
@@ -20,55 +20,30 @@ User.create = (newUser) => new Promise((resolve, reject) => {
     password: newUser.password,
     login: newUser.login,
   })
-    .then(response => resolve(response))
-    .catch(err => reject(err));
-})
 
-
-User.getAll = () => new Promise((resolve, reject) => {
+User.getAll = async () => 
   knex('users')
     .select('id', 'fullName', 'email', 'age', 'address')
-    .then(response => resolve(response))
-    .catch(err => reject(err));
-})
 
-
-User.getByName = (userName) => new Promise((resolve, reject) => {
+User.getByName = async (userName) => 
   knex('users').where('fullName', 'like', `%${userName}%`)
     .select('id', 'fullName', 'email', 'age', 'address')
-    .then(response => {
-      resolve(response)
-    })
-    .catch(err => reject(err));
-})
 
 
-User.findById = (id) => new Promise((resolve, reject) => {
+User.findById = async (id) => 
   knex('users').where('id', id)
     .select('id', 'fullName', 'email', 'age', 'address')
     .first()
-    .then(response => resolve(response))
-    .catch(err => reject(err));
-})
 
-
-User.updateById = (id, user) => new Promise((resolve, reject) => {
+User.updateById = async (id, user) => 
   knex('users').where('id', id).update({
     address: user.address,
     fullName: user.name,
     email: user.email,
     age: user.age
   })
-    .then(response => resolve(response))
-    .catch(err => reject(err));
-})
 
-
-User.remove = (id) => new Promise((resolve, reject) => {
+User.remove = async (id) => 
   knex('users').where('id', id).del()
-    .then(response => resolve(response))
-    .catch(err => reject(err));
-})
-
 
 module.exports = User;
